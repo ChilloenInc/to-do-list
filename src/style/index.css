@@ -1,0 +1,19 @@
+
+.App {
+ padding: 0;
+ margin: 0;
+ width: 360px;
+ height: 620px; 
+ border: 1px solid black;  
+}
+
+body {
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100vw;
+}
+

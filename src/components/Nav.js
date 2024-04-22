@@ -1,8 +1,22 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import '../style/nav.css';
 import {images} from '../iconImage';
 
-const Navbar = ({ onSearchButtonClick, onSearch, isAdding, onAdd, onBack, onSave, isSearching }) => {
+const Navbar = ({ onSearchButtonClick, onSearch, isAdding, onAdd, onBack, onSave, isEditing, isSearching }) => {
+  
+  const [titleText, setTitleText] = useState('Todo');
+
+  useEffect(() => {
+    if (isAdding) {
+      setTitleText('Add');
+      if(isEditing) {
+        setTitleText('Edit');
+      }
+    } else {
+      setTitleText('Todo');
+    }
+  }, [isAdding, isEditing]);
+
   return (
     <nav className='nav'>
 
@@ -15,7 +29,7 @@ const Navbar = ({ onSearchButtonClick, onSearch, isAdding, onAdd, onBack, onSave
           />
         </div>
       ): (
-        <span className='titleText'>Todo</span>
+        <span className='titleText'>{titleText}</span>
       )}
 
     <div className='buttons'>

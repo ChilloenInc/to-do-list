@@ -39,6 +39,7 @@ const App = () => {
   const [editIndex, setEditIndex] = useState(null);
   const [isAdding, setIsAdding] = useState(false);
   const [isSearching, setIsSearching] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
 
   // 상태가 꼬이기 떄문에 전역상태관리 라이브러리 -> Redux, Recoil
   // 컴포넌트 추상화
@@ -54,14 +55,16 @@ const App = () => {
   const handleAdd = () => {
     setIsAdding(true);
     setIsSearching(false);
+    setIsEditing(false);
   };
 
   const handleTodoClick = (index) => {
-      setEditIndex(index);
-      setIsAdding(true);
-      setIsSearching(false);
-      setTitle(todos[index].title);
-      setBody(todos[index].body);
+    setIsEditing(true);
+    setIsAdding(true);
+    setIsSearching(false);
+    setEditIndex(index);
+    setTitle(todos[index].title);
+    setBody(todos[index].body);
   };
 
   const handleBack = () => {
@@ -89,6 +92,7 @@ const App = () => {
       const updatedTodos = [...todos];
       if (editIndex !== null) {
         updatedTodos[editIndex] = { title, body };
+        setIsEditing(false);
       } else {
         updatedTodos.push({ title, body });
       }
@@ -111,6 +115,7 @@ const App = () => {
         onSearch={handleSearchTerm}
         isSearching={isSearching}
         isAdding={isAdding}
+        isEditing={isEditing}
         onAdd={handleAdd}
         onBack={handleBack}
         onSave={handleSave}

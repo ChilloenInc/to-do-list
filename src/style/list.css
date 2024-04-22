@@ -14,8 +14,9 @@ li {
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
-    min-height: 485px;
+    height: 574px;
     margin: 0 auto;
+    overflow: scroll;
 }
 
 .inner .box_wrap li {

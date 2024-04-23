@@ -138,6 +138,7 @@ const App = () => {
       />
       {isAdding || isEditing ? (
         <div className="form">
+          <div className="form_box">
           <input
             className="form_title"
             type="text"
@@ -151,6 +152,7 @@ const App = () => {
             placeholder="Description"
             onChange={(e) => setBody(e.target.value)}
           />
+          </div>
         </div>
       ) : (
         <Container

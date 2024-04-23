@@ -19,9 +19,13 @@
     margin: 4px;
 }
 .items .list_form {
-    margin: 20px 15px;
+    margin: 20px 15px;  
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    overflow: hidden;
 }
-.items .list_title {
+.list_form .list_title {
     font-family: Roboto;
     font-size: 16px;
     font-weight: 500;
@@ -34,7 +38,9 @@
     text-overflow: ellipsis;
     margin-bottom: 10px;
 }
-.items .list_text {
+.list_form .list_text {
+    width: 125px;
+    height: 55px;
     font-family: 'Times New Roman';
     font-size: 12px;
     font-weight: 400;

@@ -110,7 +110,6 @@ const App = () => {
       setBody("");
     }
   };
-  
 
   const handleFilterTodoList = (searchTerm) => {
     setSearchTerm(searchTerm);

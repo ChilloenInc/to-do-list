@@ -70,6 +70,7 @@ const App = () => {
   const handleBack = () => {
     if (isSearching) {
       setIsSearching(false);
+      setSearchTerm("");
     } else {
       console.log(editTodoId)
       if (editTodoId !== null) {
@@ -79,7 +80,7 @@ const App = () => {
         if (confirmDelete) {
           setEditTodoId(null);
           setIsAdding(false);
-          setIsEditing(false)
+          setIsEditing(false);
           setTitle("");
           setBody("");
         }
@@ -105,6 +106,8 @@ const App = () => {
       setTodos(updatedTodos);
       setIsAdding(false);
       setIsEditing(false);
+      setIsSearching(false);
+      setSearchTerm(null);
       setEditTodoId(null);
       setTitle("");
       setBody("");

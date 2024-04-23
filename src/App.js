@@ -96,9 +96,11 @@ const App = () => {
       const updatedTodos = [...todos];
       console.log(editTodoId)
       if (editTodoId !== null) {
-        updatedTodos[editTodoId] = { title, body };
+        const index = updatedTodos.findIndex(todo => todo.id === editTodoId);
+        updatedTodos[index] = { id: editTodoId, title, body }; 
       } else {
-        updatedTodos.push({ id: todos.length + 1 ,title, body });
+        updatedTodos.push({ id: id, title, body }); 
+        setId(id + 1); 
       }
       setTodos(updatedTodos);
       setIsAdding(false);
@@ -108,6 +110,7 @@ const App = () => {
       setBody("");
     }
   };
+  
 
   const handleFilterTodoList = (searchTerm) => {
     setSearchTerm(searchTerm);

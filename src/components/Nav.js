@@ -13,7 +13,6 @@ const Navbar = ({
   isSearching,
 }) => {
   const [titleText, setTitleText] = useState("Todo");
-  const [serchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     if (isAdding) {
@@ -28,7 +27,6 @@ const Navbar = ({
 
   const handleSearchTerm = (searchTerm) => {
     onSearchButtonClick();
-    setSearchTerm(searchTerm);
     onSearch(searchTerm);
   }
 

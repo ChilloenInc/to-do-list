@@ -39,6 +39,8 @@ const App = () => {
   const [editTodoId, setEditTodoId] = useState(null);
   const [isAdding, setIsAdding] = useState(false);
   const [isSearching, setIsSearching] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
   const [isEditing, setIsEditing] = useState(false);
 
   // 상태가 꼬이기 떄문에 전역상태관리 라이브러리 -> Redux, Recoil
@@ -108,17 +110,17 @@ const App = () => {
   };
 
   const handleFilterTodoList = (searchTerm) => {
-    if(!Boolean(searchTerm)) {
-      setTodos(todos)
-      return
+    setSearchTerm(searchTerm);
+    if (!searchTerm) {
+      setSearchResults([]);
+      return;
     }
     const filteredTodos = todos.filter((todo) =>
-    todo.title.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-    setTodos(filteredTodos)
-  }
+      todo.title.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    setSearchResults(filteredTodos);
+  };
   
-
   return (
     <div className="App">
       <Navbar
@@ -149,7 +151,7 @@ const App = () => {
         </div>
       ) : (
         <Container
-          todos={todos}
+          todos={searchTerm ? searchResults : todos}
           onTodoClick={handleTodoClick}
         />
       )}

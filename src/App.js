@@ -33,10 +33,10 @@ const initTodo = [
 
 const App = () => {
   const [todos, setTodos] = useState(initTodo);
-  const [searchTerm, setSearchTerm] = useState("");
+  const [id, setId] = useState(4);
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
-  const [editIndex, setEditTodoId] = useState(null);
+  const [editTodoId, setEditTodoId] = useState(null);
   const [isAdding, setIsAdding] = useState(false);
   const [isSearching, setIsSearching] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
@@ -46,10 +46,6 @@ const App = () => {
   const handleSearchButtonClick = () => {
     setIsSearching(true);
     setIsAdding(false);
-  };
-
-  const handleSearchTerm = (e) => {
-    setSearchTerm(e.target.value);
   };
 
   const handleAdd = () => {
@@ -73,50 +69,61 @@ const App = () => {
     if (isSearching) {
       setIsSearching(false);
     } else {
-      if (editIndex !== null) {
+      console.log(editTodoId)
+      if (editTodoId !== null) {
         const confirmDelete = window.confirm(
           "Are you sure you want to remove everything"
         );
         if (confirmDelete) {
           setEditTodoId(null);
           setIsAdding(false);
+          setIsEditing(false)
           setTitle("");
           setBody("");
         }
-      } else {
-        setIsAdding(false);
-        setTitle("");
-        setBody("");
-      }
-    }
+      } 
+    }        
+    setIsEditing(false)
+    setIsAdding(false);
+    setTitle("");
+    setBody("");
   };
 
   const handleSave = () => {
     if (title !== "" && body !== "") {
       const updatedTodos = [...todos];
-      if (editIndex !== null) {
-        updatedTodos[editIndex] = { title, body };
-        setIsEditing(false);
+      console.log(editTodoId)
+      if (editTodoId !== null) {
+        updatedTodos[editTodoId] = { title, body };
       } else {
-        updatedTodos.push({ title, body });
+        updatedTodos.push({ id: todos.length + 1 ,title, body });
       }
       setTodos(updatedTodos);
       setIsAdding(false);
+      setIsEditing(false);
       setEditTodoId(null);
       setTitle("");
       setBody("");
     }
   };
 
-  const filteredTodos = todos.filter((todo) =>
+  const handleFilterTodoList = (searchTerm) => {
+    if(!Boolean(searchTerm)) {
+      setTodos(todos)
+      return
+    }
+    const filteredTodos = todos.filter((todo) =>
     todo.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
+    setTodos(filteredTodos)
+  }
+  
 
   return (
     <div className="App">
       <Navbar
         onSearchButtonClick={handleSearchButtonClick}
-        onSearch={handleSearchTerm}
+        onSearch={handleFilterTodoList}
         isSearching={isSearching}
         isAdding={isAdding}
         isEditing={isEditing}
@@ -124,7 +131,7 @@ const App = () => {
         onBack={handleBack}
         onSave={handleSave}
       />
-      {isAdding ? (
+      {isAdding || isEditing ? (
         <div className="form">
           <input
             className="form_title"
@@ -142,11 +149,8 @@ const App = () => {
         </div>
       ) : (
         <Container
-          todos={filteredTodos}
+          todos={todos}
           onTodoClick={handleTodoClick}
-          setEditIndex={setEditTodoId}
-          onEdit={handleSave}
-          editIndex={editIndex}
         />
       )}
     </div>

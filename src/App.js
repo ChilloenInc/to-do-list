@@ -6,21 +6,21 @@ import "../src/style/form.css";
 import "./style/index.css";
 
 const initTodo = [
-  {
-    id: 1,
-    title: "React",
-    body: "React is",
-  },
-  {
-    id: 2,
-    title: "JS",
-    body: "JS is",
-  },
-  {
-    id: 3,
-    title: "Todo",
-    body: "Todo something...",
-  },
+  // {
+  //   id: 1,
+  //   title: "React",
+  //   body: "React is",
+  // },
+  // {
+  //   id: 2,
+  //   title: "JS",
+  //   body: "JS is",
+  // },
+  // {
+  //   id: 3,
+  //   title: "Todo",
+  //   body: "Todo something...",
+  // },
 ];
 // 추상황 -> 재사용성 up, 테스트하기 용이
 // 리스트, 검색상태, 조회상태, 수정상태
@@ -59,6 +59,7 @@ const App = () => {
   const handleSearchButtonClick = () => {
     setIsSearching(true);
     setIsAdding(false);
+    setIsEditing(false);
   };
 
   const handleAdd = () => {
@@ -67,7 +68,7 @@ const App = () => {
     setIsEditing(false);
   };
 
-  const handleTodoClick = (id) => {
+  const handleEditClick = (id) => {
     setIsEditing(true);
     setIsAdding(true);
     setIsSearching(false);
@@ -119,6 +120,8 @@ const App = () => {
       setSearchTerm(null);
       setEditTodoId(null);
       setContent({title:"", body:""});
+    } else {
+      alert('내용을 입력하세요')
     }
   };
 
@@ -152,7 +155,7 @@ const App = () => {
         /> : (
         <Container
           todos={searchTerm ? searchResults : todos}
-          onTodoClick={handleTodoClick}
+          onTodoClick={handleEditClick}
         />
       )}
     </div>

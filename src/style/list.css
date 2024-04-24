@@ -2,6 +2,7 @@
     height: 560px;
     margin: 0 auto;
     overflow: hidden;
+    position: relative;
 }
 .box_wrap{
     display: flex;
@@ -49,4 +50,20 @@
     text-align: left;
     word-break: break-all;
     -webkit-line-clamp: 3;
+}
+.emptyFrom{
+    display: flex;
+    flex-direction: column; 
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    gap: 20px;
+    text-align: center;
+}
+
+.emptyTag{
+    opacity: 0.4;
 }

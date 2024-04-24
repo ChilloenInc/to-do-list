@@ -22,6 +22,7 @@ const initTodo = [
   //   body: "Todo something...",
   // },
 ];
+
 // 추상황 -> 재사용성 up, 테스트하기 용이
 // 리스트, 검색상태, 조회상태, 수정상태
 // 리스트 = 할일을 보여주면 되고
@@ -35,8 +36,6 @@ const initTodo = [
 const App = () => {
   const [todos, setTodos] = useState(initTodo);
   const [id, setId] = useState(4);
-  //const [title, setTitle] = useState("");
-  //const [body, setBody] = useState("");
   const [editTodoId, setEditTodoId] = useState(null);
   const [isAdding, setIsAdding] = useState(false);
   const [isSearching, setIsSearching] = useState(false);
@@ -46,7 +45,8 @@ const App = () => {
   const [content, setContent] = useState({
     title:'',
     body:'',
-  })
+  });
+
   // 상태가 꼬이기 떄문에 전역상태관리 라이브러리 -> Redux, Recoil
   // 컴포넌트 추상화
   const handleContent = (e) => {
@@ -54,7 +54,7 @@ const App = () => {
       ...content,
       [e.target.name]: e.target.value,
     })
-  }
+  };
 
   const handleSearchButtonClick = () => {
     setIsSearching(true);
@@ -68,10 +68,10 @@ const App = () => {
     setIsEditing(false);
   };
 
-  const handleEditClick = (id) => {
-    setIsEditing(true);
-    setIsAdding(true);
+  const handleEditTodoClick = (id) => {
     setIsSearching(false);
+    setIsAdding(false);
+    setIsEditing(true);
     setEditTodoId(id);
     const editTodo = todos.find((todo) => todo.id === id);
     const { title, body } = editTodo;
@@ -79,33 +79,36 @@ const App = () => {
   };
 
   const handleBack = () => {
-    if (isSearching) {
+    console.log(isAdding, isEditing, isSearching)
+    if(isAdding) {
+      const confirmDelete  = window.confirm(
+        "Are you sure you want to remove everything"
+      );
+      if(confirmDelete){
+        setIsAdding(false);
+        setContent({title:"", body:""});
+      }
+    }
+    if(isSearching){
       setIsSearching(false);
       setSearchTerm("");
-    } else {
-      console.log(editTodoId)
-      if (editTodoId !== null) {
-        const confirmDelete = window.confirm(
+      
+      if(isEditing){
+        const confirmDelete  = window.confirm(
           "Are you sure you want to remove everything"
         );
-        if (confirmDelete) {
-          setEditTodoId(null);
-          setIsAdding(false);
+        if(confirmDelete){
           setIsEditing(false);
           setContent({title:"", body:""});
         }
-      } 
-    }        
-    setIsEditing(false)
-    setIsAdding(false);
-    setContent({title:"", body:""});
+      };     
+    }
   };
 
   const handleSave = () => {
     console.log(content)
     if (content.title !== '' && content.body !== '') {
       const updatedTodos = [...todos];
-      console.log(editTodoId)
       if (editTodoId !== null) {
         const index = updatedTodos.findIndex(todo => todo.id === editTodoId);
         updatedTodos[index] = { id: editTodoId, title: content.title , body: content.body }; 
@@ -155,7 +158,7 @@ const App = () => {
         /> : (
         <Container
           todos={searchTerm ? searchResults : todos}
-          onTodoClick={handleEditClick}
+          onTodoClick={handleEditTodoClick}
         />
       )}
     </div>

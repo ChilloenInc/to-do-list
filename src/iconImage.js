@@ -4,7 +4,7 @@ import Search from './icons/search.svg';
 import Add from './icons/add_circle_outline.svg';
 import Submit from './icons/save.svg';
 import Empty from './icons/emptybox.svg';
-
+import Check from './icons/check.svg';
 
 export const images = {
   search: Search,
@@ -12,6 +12,7 @@ export const images = {
   back: Back,
   add: Add,
   submit: Submit,
-  empty: Empty
+  empty: Empty,
+  check: Check
 };
 

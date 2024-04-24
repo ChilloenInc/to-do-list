@@ -12,14 +12,15 @@ const Navbar = ({
   isEditing,
   isSearching,
 }) => {
+  
   const [titleText, setTitleText] = useState("Todo");
 
   useEffect(() => {
     if (isAdding) {
       setTitleText("Add");
-      if (isEditing) {
-        setTitleText("Edit");
-      }
+    } 
+    if (isEditing) {
+      setTitleText("Edit");
     } else {
       setTitleText("Todo");
     }
@@ -28,7 +29,7 @@ const Navbar = ({
   const handleSearchTerm = (searchTerm) => {
     onSearchButtonClick();
     onSearch(searchTerm);
-  }
+  };
 
   return (
     <nav className="nav">
@@ -38,6 +39,7 @@ const Navbar = ({
         <img src={images.back} alt="icon"></img>
       </button>
       }
+      
       <div className="textbox">
       {isSearching ? (
         <div className="search-wrap">
@@ -49,24 +51,24 @@ const Navbar = ({
         <span className="titleText">{titleText}</span>
       )}
       </div>
+      
       <div className="buttons">
-        {!isSearching && !isAdding && (
+        { !isAdding && !isSearching && !isEditing &&
+        <div>
           <button onClick={onSearchButtonClick}> 
             <img src={images.search} alt="icon"></img>
           </button>
-        )}
-        {!isSearching && !isAdding && (
+
           <button onClick={onAdd}>
             <img src={images.add} alt="icon"></img>
           </button>
-        )}
-        {isAdding && (
-          <>
-            <button onClick={onSave}>
-              <img src={images.submit} alt="icon"></img>
-            </button>
-          </>
-        )}
+        </div>
+        }
+        { (isAdding || isEditing) &&  
+          <button onClick={onSave}>
+            {isAdding ? <img src={images.check} alt="icon"></img> : <img src={images.submit} alt="icon"></img>}
+          </button>
+        }
       </div>
     </nav>
   );

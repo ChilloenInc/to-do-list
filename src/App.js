@@ -96,10 +96,10 @@ const App = () => {
         setIsEditing(false);
         setContent({title:"", body:""});
       }
-      if(isSearching){
-        setIsSearching(false);
-        setSearchTerm("");
-      }
+    }
+    if(isSearching){
+      setIsSearching(false);
+      setSearchTerm("");
     }
   };
 

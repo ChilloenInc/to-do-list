@@ -37,9 +37,9 @@ const App = () => {
   const [todos, setTodos] = useState(initTodo);
   const [id, setId] = useState(4);
   const [editTodoId, setEditTodoId] = useState(null);
+  const [isEditing, setIsEditing] = useState(false);
   const [isAdding, setIsAdding] = useState(false);
   const [isSearching, setIsSearching] = useState(false);
-  const [isEditing, setIsEditing] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [content, setContent] = useState({
@@ -89,19 +89,18 @@ const App = () => {
         setContent({title:"", body:""});
       }
     }
-    if(isSearching){
-      setIsSearching(false);
-      setSearchTerm("");
-      
-      if(isEditing){
-        const confirmDelete  = window.confirm(
-          "Are you sure you want to remove everything"
-        );
-        if(confirmDelete){
-          setIsEditing(false);
-          setContent({title:"", body:""});
-        }
-      };     
+    if(isEditing){
+      const confirmDelete  = window.confirm(
+        "Are you sure you want to remove everything"
+      );
+      if(confirmDelete){
+        setIsEditing(false);
+        setContent({title:"", body:""});
+      }
+      if(isSearching){
+        setIsSearching(false);
+        setSearchTerm("");
+      }
     }
   };
 
@@ -152,7 +151,7 @@ const App = () => {
         onBack={handleBack}
         onSave={handleSave}
       />
-      {isAdding || isEditing ? 
+      { isAdding || isEditing ? 
         <Form content={content}
               handleContent={handleContent}
         /> : (

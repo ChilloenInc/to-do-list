@@ -50,6 +50,7 @@
     text-align: left;
     word-break: break-all;
     -webkit-line-clamp: 3;
+    white-space: pre-line;
 }
 .emptyFrom{
     display: flex;

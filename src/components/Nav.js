@@ -66,7 +66,10 @@ const Navbar = ({
         }
         { (isAdding || isEditing) &&  
           <button onClick={onSave}>
-            {isAdding ? <img src={images.check} alt="icon"></img> : <img src={images.submit} alt="icon"></img>}
+            { isAdding ? 
+              <img src={images.check} alt="icon"></img> : 
+              <img src={images.submit} alt="icon"></img>
+            }
           </button>
         }
       </div>

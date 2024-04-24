@@ -79,7 +79,6 @@ const App = () => {
   };
 
   const handleBack = () => {
-    console.log(isAdding, isEditing, isSearching)
     if(isAdding) {
       const confirmDelete  = window.confirm(
         "Are you sure you want to remove everything"
@@ -105,7 +104,6 @@ const App = () => {
   };
 
   const handleSave = () => {
-    console.log(content)
     if (content.title !== '' && content.body !== '') {
       const updatedTodos = [...todos];
       if (editTodoId !== null) {

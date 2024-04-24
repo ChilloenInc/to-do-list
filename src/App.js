@@ -4,6 +4,8 @@ import Container from "./components/Container";
 import Form from "./components/Form";
 import "../src/style/form.css";
 import "./style/index.css";
+import { useRecoilState, useSetRecoilState } from "recoil";
+import { todoAtom, searchAtom } from "./store/atom";
 
 const initTodo = [
   // {
@@ -34,17 +36,22 @@ const initTodo = [
 //1. react-hooks(custom-hooks), 2.컴포넌트 단에서 나누는 방법
 
 const App = () => {
-  const [todos, setTodos] = useState(initTodo);
+  const [todos, setTodos] = useRecoilState(todoAtom);
+  const setSearchResults = useSetRecoilState(searchAtom);
   const [id, setId] = useState(4);
   const [editTodoId, setEditTodoId] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [isAdding, setIsAdding] = useState(false);
   const [isSearching, setIsSearching] = useState(false);
+  // 1차. edit, add, search, basic
+  // 2차 edit, add, search, content
+  // ! 역이는것은 하나로 모아주는것이 중요하다. => 객체로 관리
   const [searchTerm, setSearchTerm] = useState("");
-  const [searchResults, setSearchResults] = useState([]);
+
   const [content, setContent] = useState({
-    title:'',
-    body:'',
+    mode: "basic",
+    title: "",
+    body: "",
   });
 
   // 상태가 꼬이기 떄문에 전역상태관리 라이브러리 -> Redux, Recoil
@@ -53,7 +60,7 @@ const App = () => {
     setContent({
       ...content,
       [e.target.name]: e.target.value,
-    })
+    });
   };
 
   const handleSearchButtonClick = () => {
@@ -75,43 +82,47 @@ const App = () => {
     setEditTodoId(id);
     const editTodo = todos.find((todo) => todo.id === id);
     const { title, body } = editTodo;
-    setContent({title:title, body:body});
+    setContent({ title: title, body: body });
   };
 
   const handleBack = () => {
-    if(isAdding) {
-      const confirmDelete  = window.confirm(
+    if (isAdding) {
+      const confirmDelete = window.confirm(
         "Are you sure you want to remove everything"
       );
-      if(confirmDelete){
+      if (confirmDelete) {
         setIsAdding(false);
-        setContent({title:"", body:""});
+        setContent({ title: "", body: "" });
       }
     }
-    if(isEditing){
-      const confirmDelete  = window.confirm(
+    if (isEditing) {
+      const confirmDelete = window.confirm(
         "Are you sure you want to remove everything"
       );
-      if(confirmDelete){
+      if (confirmDelete) {
         setIsEditing(false);
-        setContent({title:"", body:""});
+        setContent({ title: "", body: "" });
       }
     }
-    if(isSearching){
+    if (isSearching) {
       setIsSearching(false);
       setSearchTerm("");
     }
   };
 
   const handleSave = () => {
-    if (content.title !== '' && content.body !== '') {
+    if (content.title !== "" && content.body !== "") {
       const updatedTodos = [...todos];
       if (editTodoId !== null) {
-        const index = updatedTodos.findIndex(todo => todo.id === editTodoId);
-        updatedTodos[index] = { id: editTodoId, title: content.title , body: content.body }; 
+        const index = updatedTodos.findIndex((todo) => todo.id === editTodoId);
+        updatedTodos[index] = {
+          id: editTodoId,
+          title: content.title,
+          body: content.body,
+        };
       } else {
-        updatedTodos.push({ id: id, title: content.title , body: content.body }); 
-        setId(id + 1); 
+        updatedTodos.push({ id: id, title: content.title, body: content.body });
+        setId(id + 1);
       }
       setTodos(updatedTodos);
       setIsAdding(false);
@@ -119,9 +130,9 @@ const App = () => {
       setIsSearching(false);
       setSearchTerm(null);
       setEditTodoId(null);
-      setContent({title:"", body:""});
+      setContent({ title: "", body: "" });
     } else {
-      alert('내용을 입력하세요')
+      alert("내용을 입력하세요");
     }
   };
 
@@ -136,7 +147,7 @@ const App = () => {
     );
     setSearchResults(filteredTodos);
   };
-  
+
   return (
     <div className="App">
       <Navbar
@@ -149,14 +160,10 @@ const App = () => {
         onBack={handleBack}
         onSave={handleSave}
       />
-      { isAdding || isEditing ? 
-        <Form content={content}
-              handleContent={handleContent}
-        /> : (
-        <Container
-          todos={searchTerm ? searchResults : todos}
-          onTodoClick={handleEditTodoClick}
-        />
+      {isAdding || isEditing ? (
+        <Form content={content} handleContent={handleContent} />
+      ) : (
+        <Container hasText={searchTerm} onTodoClick={handleEditTodoClick} />
       )}
     </div>
   );

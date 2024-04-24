@@ -25,25 +25,34 @@ const Navbar = ({
     }
   }, [isAdding, isEditing]);
 
+  const handleSearchTerm = (searchTerm) => {
+    onSearchButtonClick();
+    onSearch(searchTerm);
+  }
+
   return (
     <nav className="nav">
+      {
+        (isAdding || isSearching || isEditing ) &&  
+      <button onClick={onBack}> 
+        <img src={images.back} alt="icon"></img>
+      </button>
+      }
+      <div className="textbox">
       {isSearching ? (
         <div className="search-wrap">
-          <input type="text" placeholder="검색" onChange={onSearch} />
+          <input type="text" placeholder="검색" onChange={(e) => {
+            handleSearchTerm(e.target.value);
+          }} />
         </div>
       ) : (
         <span className="titleText">{titleText}</span>
       )}
-
+      </div>
       <div className="buttons">
         {!isSearching && !isAdding && (
-          <button onClick={onSearchButtonClick}>
+          <button onClick={onSearchButtonClick}> 
             <img src={images.search} alt="icon"></img>
-          </button>
-        )}
-        {isSearching && (
-          <button onClick={onBack}>
-            <img src={images.back} alt="icon"></img>
           </button>
         )}
         {!isSearching && !isAdding && (
@@ -55,9 +64,6 @@ const Navbar = ({
           <>
             <button onClick={onSave}>
               <img src={images.submit} alt="icon"></img>
-            </button>
-            <button onClick={onBack}>
-              <img src={images.back} alt="icon"></img>
             </button>
           </>
         )}

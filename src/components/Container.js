@@ -1,18 +1,18 @@
+import { images } from "../iconImage";
 import "../style/list.css";
+import TodoList from "./TodoList";
 
 const Container = ({ todos, onTodoClick }) => {
+
   return (
     <div className="inner">
-      <ul className="box_wrap">
-        {todos.map((todo, index) => (
-          <li key={`todos=${index}`} onClick={() => onTodoClick(todo.id)}>
-            <div className="items">
-              <span className="list_title">{todo.title}</span>
-              <p className="list_text">{todo.body}</p>
-            </div>
-          </li>
-        ))}
-      </ul>
+      {todos.length ?
+      <TodoList todos={todos} onTodoClick={onTodoClick} />
+      : <div className="emptyFrom">
+          <img className="emptyImg" src={images.empty} />
+          <span className="emptyTag">You have no to-dos</span>
+        </div>
+      }
     </div>
   );
 };

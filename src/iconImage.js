@@ -1,14 +1,17 @@
-import Close from './icons/close.png';
-import Back from './icons/arrow_back.png';
-import Search from './icons/search.png';
-import Add from './icons/add.png';
-import Submit from './icons/submit.png';
+import Close from './icons/close.svg';
+import Back from './icons/arrow_back.svg';
+import Search from './icons/search.svg';
+import Add from './icons/add_circle_outline.svg';
+import Submit from './icons/save.svg';
+import Empty from './icons/emptybox.svg';
+
 
 export const images = {
   search: Search,
   close: Close,
   back: Back,
   add: Add,
-  submit: Submit
+  submit: Submit,
+  empty: Empty
 };
 

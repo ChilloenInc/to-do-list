@@ -21,10 +21,11 @@ const Navbar = ({
     } 
     if (isEditing) {
       setTitleText("Edit");
-    } else {
+    } 
+    else if(!isAdding && !isEditing){
       setTitleText("Todo");
     }
-  }, [isAdding, isEditing]);
+  }, [isAdding,isEditing,isSearching]);
 
   const handleSearchTerm = (searchTerm) => {
     onSearchButtonClick();

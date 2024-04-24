@@ -1,21 +1,24 @@
 import React from "react";
 
-const Form = ({ title, body, setTitle, setBody }) => {
+const Form = ({ content, handleContent }) => {
+
   return (
     <div className="form">
       <div className="form_box">
         <input
           className="form_title"
           type="text"
-          value={title}
+          name="title"
+          value={content.title}
           placeholder="Title"
-          onChange={(e) => setTitle(e.target.value)}
+          onChange={handleContent}
         />
         <textarea
+          name="body"
           className="form_text"
-          value={body}
+          value={content.body}
           placeholder="Description"
-          onChange={(e) => setBody(e.target.value)}
+          onChange={handleContent}
         />
       </div>
     </div>

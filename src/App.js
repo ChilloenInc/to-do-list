@@ -35,17 +35,27 @@ const initTodo = [
 const App = () => {
   const [todos, setTodos] = useState(initTodo);
   const [id, setId] = useState(4);
-  const [title, setTitle] = useState("");
-  const [body, setBody] = useState("");
+  //const [title, setTitle] = useState("");
+  //const [body, setBody] = useState("");
   const [editTodoId, setEditTodoId] = useState(null);
   const [isAdding, setIsAdding] = useState(false);
   const [isSearching, setIsSearching] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState([]);
-  const [isEditing, setIsEditing] = useState(false);
-
+  const [content, setContent] = useState({
+    title:'',
+    body:'',
+  })
   // 상태가 꼬이기 떄문에 전역상태관리 라이브러리 -> Redux, Recoil
   // 컴포넌트 추상화
+  const handleContent = (e) => {
+    setContent({
+      ...content,
+      [e.target.name]: e.target.value,
+    })
+  }
+
   const handleSearchButtonClick = () => {
     setIsSearching(true);
     setIsAdding(false);
@@ -64,8 +74,7 @@ const App = () => {
     setEditTodoId(id);
     const editTodo = todos.find((todo) => todo.id === id);
     const { title, body } = editTodo;
-    setTitle(title);
-    setBody(body);
+    setContent({title:title, body:body});
   };
 
   const handleBack = () => {
@@ -82,26 +91,25 @@ const App = () => {
           setEditTodoId(null);
           setIsAdding(false);
           setIsEditing(false);
-          setTitle("");
-          setBody("");
+          setContent({title:"", body:""});
         }
       } 
     }        
     setIsEditing(false)
     setIsAdding(false);
-    setTitle("");
-    setBody("");
+    setContent({title:"", body:""});
   };
 
   const handleSave = () => {
-    if (title !== "" && body !== "") {
+    console.log(content)
+    if (content.title !== '' && content.body !== '') {
       const updatedTodos = [...todos];
       console.log(editTodoId)
       if (editTodoId !== null) {
         const index = updatedTodos.findIndex(todo => todo.id === editTodoId);
-        updatedTodos[index] = { id: editTodoId, title, body }; 
+        updatedTodos[index] = { id: editTodoId, title: content.title , body: content.body }; 
       } else {
-        updatedTodos.push({ id: id, title, body }); 
+        updatedTodos.push({ id: id, title: content.title , body: content.body }); 
         setId(id + 1); 
       }
       setTodos(updatedTodos);
@@ -110,8 +118,7 @@ const App = () => {
       setIsSearching(false);
       setSearchTerm(null);
       setEditTodoId(null);
-      setTitle("");
-      setBody("");
+      setContent({title:"", body:""});
     }
   };
 
@@ -140,10 +147,8 @@ const App = () => {
         onSave={handleSave}
       />
       {isAdding || isEditing ? 
-        <Form title={title} 
-              body={body} 
-              setTitle={setTitle} 
-              setBody={setBody}
+        <Form content={content}
+              handleContent={handleContent}
         /> : (
         <Container
           todos={searchTerm ? searchResults : todos}

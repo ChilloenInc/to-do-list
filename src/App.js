@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Navbar from "./components/Nav";
 import Container from "./components/Container";
+import Form from "./components/Form";
 import "../src/style/form.css";
 import "./style/index.css";
 
@@ -138,25 +139,12 @@ const App = () => {
         onBack={handleBack}
         onSave={handleSave}
       />
-      {isAdding || isEditing ? (
-        <div className="form">
-          <div className="form_box">
-          <input
-            className="form_title"
-            type="text"
-            value={title}
-            placeholder="Tittle"
-            onChange={(e) => setTitle(e.target.value)}
-          />
-          <textarea
-            className="form_text"
-            value={body}
-            placeholder="Description"
-            onChange={(e) => setBody(e.target.value)}
-          />
-          </div>
-        </div>
-      ) : (
+      {isAdding || isEditing ? 
+        <Form title={title} 
+              body={body} 
+              setTitle={setTitle} 
+              setBody={setBody}
+        /> : (
         <Container
           todos={searchTerm ? searchResults : todos}
           onTodoClick={handleTodoClick}

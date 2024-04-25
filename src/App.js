@@ -7,24 +7,6 @@ import "./style/index.css";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import { todoAtom, searchAtom } from "./store/atom";
 
-const initTodo = [
-  // {
-  //   id: 1,
-  //   title: "React",
-  //   body: "React is",
-  // },
-  // {
-  //   id: 2,
-  //   title: "JS",
-  //   body: "JS is",
-  // },
-  // {
-  //   id: 3,
-  //   title: "Todo",
-  //   body: "Todo something...",
-  // },
-];
-
 // 추상황 -> 재사용성 up, 테스트하기 용이
 // 리스트, 검색상태, 조회상태, 수정상태
 // 리스트 = 할일을 보여주면 되고
@@ -40,13 +22,15 @@ const App = () => {
   const setSearchResults = useSetRecoilState(searchAtom);
   const [id, setId] = useState(4);
   const [editTodoId, setEditTodoId] = useState(null);
-  const [isEditing, setIsEditing] = useState(false);
-  const [isAdding, setIsAdding] = useState(false);
-  const [isSearching, setIsSearching] = useState(false);
   // 1차. edit, add, search, basic
   // 2차 edit, add, search, content
   // ! 역이는것은 하나로 모아주는것이 중요하다. => 객체로 관리
   const [searchTerm, setSearchTerm] = useState("");
+  const [status, setStatus] = useState({
+    isAdding: false,
+    isSearching: false,
+    isEditing: false
+  });
 
   const [content, setContent] = useState({
     mode: "basic",
@@ -63,22 +47,35 @@ const App = () => {
     });
   };
 
+  const handleRest = () => {
+    setStatus({
+      isSearching: false,
+      isAdding: false,
+      isEditing: false      
+    });
+    setEditTodoId(null);
+    setContent({ title: "", body: "" });
+  };
+
   const handleSearchButtonClick = () => {
-    setIsSearching(true);
-    setIsAdding(false);
-    setIsEditing(false);
+    setStatus(prevStatus => ({
+      ...prevStatus,
+      isSearching: true
+    }));
   };
 
   const handleAdd = () => {
-    setIsAdding(true);
-    setIsSearching(false);
-    setIsEditing(false);
+    setStatus(prevStatus => ({
+      ...prevStatus,
+      isAdding: true
+    }));
   };
 
   const handleEditTodoClick = (id) => {
-    setIsSearching(false);
-    setIsAdding(false);
-    setIsEditing(true);
+    setStatus(prevStatus => ({
+      ...prevStatus,
+      isEditing: true
+    }));
     setEditTodoId(id);
     const editTodo = todos.find((todo) => todo.id === id);
     const { title, body } = editTodo;
@@ -86,27 +83,24 @@ const App = () => {
   };
 
   const handleBack = () => {
-    if (isAdding) {
+    if (status.isAdding ) {
       const confirmDelete = window.confirm(
         "Are you sure you want to remove everything"
       );
       if (confirmDelete) {
-        setIsAdding(false);
-        setContent({ title: "", body: "" });
+        handleRest();
       }
     }
-    if (isEditing) {
+    if (status.isEditing) {
       const confirmDelete = window.confirm(
         "Are you sure you want to remove everything"
       );
       if (confirmDelete) {
-        setIsEditing(false);
-        setContent({ title: "", body: "" });
+        handleRest();
       }
     }
-    if (isSearching) {
-      setIsSearching(false);
-      setSearchTerm("");
+    if (status.isSearching) {
+      handleRest();
     }
   };
 
@@ -125,12 +119,7 @@ const App = () => {
         setId(id + 1);
       }
       setTodos(updatedTodos);
-      setIsAdding(false);
-      setIsEditing(false);
-      setIsSearching(false);
-      setSearchTerm(null);
-      setEditTodoId(null);
-      setContent({ title: "", body: "" });
+      handleRest();
     } else {
       alert("내용을 입력하세요");
     }
@@ -153,14 +142,12 @@ const App = () => {
       <Navbar
         onSearchButtonClick={handleSearchButtonClick}
         onSearch={handleFilterTodoList}
-        isSearching={isSearching}
-        isAdding={isAdding}
-        isEditing={isEditing}
+        status={status}
         onAdd={handleAdd}
         onBack={handleBack}
         onSave={handleSave}
       />
-      {isAdding || isEditing ? (
+      {status.isAdding || status.isEditing ? (
         <Form content={content} handleContent={handleContent} />
       ) : (
         <Container hasText={searchTerm} onTodoClick={handleEditTodoClick} />

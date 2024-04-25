@@ -4,13 +4,14 @@ import "../style/list.css";
 import TodoList from "./TodoList";
 import { todoAtom, searchAtom } from "../store/atom";
 
-const Container = ({ onTodoClick, searchTerm }) => {
+const Container = ({ onTodoClick, hasText }) => {
   const todoValue = useRecoilValue(todoAtom);
   const searchValue = useRecoilValue(searchAtom);
   const resetTodo = useResetRecoilState(todoAtom);
   // useRecoilValue, useRecoilState, useSetRecoilState, useResetRecoilState
 
-  const currentTodo = searchTerm ? searchValue : todoValue;
+  const currentTodo = hasText ? searchValue : todoValue;
+
   return (
     <div className="inner">
       <button onClick={() => resetTodo()}>Clear</button>

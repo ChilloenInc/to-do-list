@@ -26,6 +26,7 @@ const Navbar = ({
   }, [status]);
 
   const handleSearchTerm = (searchTerm) => {
+    onSearchButtonClick();
     onSearch(searchTerm);
   };
 
@@ -42,8 +43,7 @@ const Navbar = ({
       {
       status.isSearching ? (
         <div className="search-wrap">
-          <input type="text" placeholder="검색" 
-          onChange={(e) => { handleSearchTerm(e.target.value);}} />
+          <input type="text" placeholder="검색" onChange={(e) => { handleSearchTerm(e.target.value);}} />
         </div>
       ) : (
         <span className="titleText">{titleText}</span>

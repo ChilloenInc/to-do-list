@@ -29,12 +29,13 @@ const reducer = (todos, action) => {
     case 'EDIT':
       const updatedTodos = [...todos];
       const index = updatedTodos.findIndex((todo) => todo.id === action.editTodoId);
-      
+     
       updatedTodos[index] = {
           id: action.editTodoId,
           title: action.title,
           body: action.body,
       };
+      console.log(action.editTodoId, updatedTodos);
       return updatedTodos;
     // case 'SEARCH':
     //   const searchResult = todos.filter((todo) => todo.title.toLowerCase()
@@ -68,7 +69,7 @@ const App = () => {
 
   //const [todos, setTodos] = useRecoilState(todoAtom);
   const setSearchResults = useSetRecoilState(searchAtom);
-  const [id, setId] = useState(4);
+  const [id, setId] = useState(3);
   const [editTodoId, setEditTodoId] = useState(null);
   // 1차. edit, add, search, basic
   // 2차 edit, add, search, content
@@ -157,7 +158,8 @@ const App = () => {
       if (editTodoId !== null) {
         dispatch({type:'EDIT', editTodoId, title: content.title, body: content.body, })
       } else {
-        dispatch({type: 'ADD', id: id, title: content.title, body: content.body})
+        dispatch({type: 'ADD', id: id, title: content.title, body: content.body});
+        setId(id+1);
       }
       handleReset();
     } else {

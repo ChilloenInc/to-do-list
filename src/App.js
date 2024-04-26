@@ -18,32 +18,18 @@ import { type } from "@testing-library/user-event/dist/type";
 // ui - 비지니스 로직 분리를 하자.
 //1. react-hooks(custom-hooks), 2.컴포넌트 단에서 나누는 방법
 const reducer = (todos, action) => {
-  switch (action.type) {
-    case 'ADD':
-      return [ ...todos, {
+  const copyTodos =  [...todos]
+  const lookupTable = {
+  'ADD': [ ...todos, {
         id: action.id + 1,
         title: action.title, 
         body: action.body 
-      }
-    ];
-    case 'EDIT':
-      const updatedTodos = [...todos];
-      const index = updatedTodos.findIndex((todo) => todo.id === action.editTodoId);
-     
-      updatedTodos[index] = {
-          id: action.editTodoId,
-          title: action.title,
-          body: action.body,
-      };
-      console.log(action.editTodoId, updatedTodos);
-      return updatedTodos;
-    // case 'SEARCH':
-    //   const searchResult = todos.filter((todo) => todo.title.toLowerCase()
-    //   .includes(action.searchTerm.toLowerCase()));
-    //   return searchResult;
-    default:
-      return todos;
+        }
+      ],
+  'EDIT': copyTodos.find((todo) => todo.id === action.editTodoId),
+  "DEFAULT": todos,
   }
+  return lookupTable[['ADD', 'EDIT'].includes(action.type) ? action.type : 'DEFAULT']
 };
 
 const initialValue = [

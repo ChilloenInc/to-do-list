@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useReducer, useState } from "react";
 import Navbar from "./components/Nav";
 import Container from "./components/Container";
 import Form from "./components/Form";
@@ -6,6 +6,7 @@ import "../src/style/form.css";
 import "./style/index.css";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import { todoAtom, searchAtom } from "./store/atom";
+import { type } from "@testing-library/user-event/dist/type";
 
 // 추상황 -> 재사용성 up, 테스트하기 용이
 // 리스트, 검색상태, 조회상태, 수정상태
@@ -16,9 +17,56 @@ import { todoAtom, searchAtom } from "./store/atom";
 // ! 이 방법이 베스트임. 함수 추상화 -> 함수형프로그래밍 -> 단점: 코드량 많아서
 // ui - 비지니스 로직 분리를 하자.
 //1. react-hooks(custom-hooks), 2.컴포넌트 단에서 나누는 방법
+const reducer = (todos, action) => {
+  switch (action.type) {
+    case 'ADD':
+      return [ ...todos, {
+        id: action.id + 1,
+        title: action.title, 
+        body: action.body 
+      }
+    ];
+    case 'EDIT':
+      const updatedTodos = [...todos];
+      const index = updatedTodos.findIndex((todo) => todo.id === action.editTodoId);
+      
+      updatedTodos[index] = {
+          id: action.editTodoId,
+          title: action.title,
+          body: action.body,
+      };
+      return updatedTodos;
+    // case 'SEARCH':
+    //   const searchResult = todos.filter((todo) => todo.title.toLowerCase()
+    //   .includes(action.searchTerm.toLowerCase()));
+    //   return searchResult;
+    default:
+      return todos;
+  }
+};
+
+const initialValue = [
+  {
+    id: 1,
+    title: "React",
+    body: "React is",
+  },
+  {
+    id: 2,
+    title: "JS",
+    body: "JS is",
+  },
+  {
+    id: 3,
+    title: "Todo",
+    body: "Todo something...",
+  },
+];
 
 const App = () => {
-  const [todos, setTodos] = useRecoilState(todoAtom);
+  const [todos, dispatch] = useReducer(reducer,initialValue);
+
+  //const [todos, setTodos] = useRecoilState(todoAtom);
   const setSearchResults = useSetRecoilState(searchAtom);
   const [id, setId] = useState(4);
   const [editTodoId, setEditTodoId] = useState(null);
@@ -33,7 +81,7 @@ const App = () => {
   });
 
   const [content, setContent] = useState({
-    mode: "basic",
+    status: "basic",
     title: "",
     body: "",
   });
@@ -47,7 +95,7 @@ const App = () => {
     });
   };
 
-  const handleRest = () => {
+  const handleReset = () => {
     setStatus({
       isSearching: false,
       isAdding: false,
@@ -88,7 +136,7 @@ const App = () => {
         "Are you sure you want to remove everything"
       );
       if (confirmDelete) {
-        handleRest();
+        handleReset();
       }
     }
     if (status.isEditing) {
@@ -96,30 +144,22 @@ const App = () => {
         "Are you sure you want to remove everything"
       );
       if (confirmDelete) {
-        handleRest();
+        handleReset();
       }
     }
     if (status.isSearching) {
-      handleRest();
+      handleReset();
     }
   };
 
   const handleSave = () => {
     if (content.title !== "" && content.body !== "") {
-      const updatedTodos = [...todos];
       if (editTodoId !== null) {
-        const index = updatedTodos.findIndex((todo) => todo.id === editTodoId);
-        updatedTodos[index] = {
-          id: editTodoId,
-          title: content.title,
-          body: content.body,
-        };
+        dispatch({type:'EDIT', editTodoId, title: content.title, body: content.body, })
       } else {
-        updatedTodos.push({ id: id, title: content.title, body: content.body });
-        setId(id + 1);
+        dispatch({type: 'ADD', id: id, title: content.title, body: content.body})
       }
-      setTodos(updatedTodos);
-      handleRest();
+      handleReset();
     } else {
       alert("내용을 입력하세요");
     }
@@ -131,10 +171,10 @@ const App = () => {
       setSearchResults([]);
       return;
     }
-    const filteredTodos = todos.filter((todo) =>
-      todo.title.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-    setSearchResults(filteredTodos);
+    const filteredTodos = todos.filter((todo) =>todo.title.toLowerCase()
+     .includes(searchTerm.toLowerCase()));
+     setSearchResults(filteredTodos);
+     //setSearchResults(dispatch({type:'SEARCH' , searchTerm}) );
   };
 
   return (
@@ -150,7 +190,9 @@ const App = () => {
       {status.isAdding || status.isEditing ? (
         <Form content={content} handleContent={handleContent} />
       ) : (
-        <Container hasText={searchTerm} onTodoClick={handleEditTodoClick} />
+        <Container hasText={searchTerm} 
+        onTodoClick={handleEditTodoClick}
+        todos={todos} />
       )}
     </div>
   );

@@ -4,9 +4,8 @@ const Form = ({ content, handleContent }) => {
 
   return (
     <div className="form">
-      <div className="form_box">
+      <div>
         <input
-          className="form_title"
           type="text"
           name="title"
           value={content.title}
@@ -15,7 +14,6 @@ const Form = ({ content, handleContent }) => {
         />
         <textarea
           name="body"
-          className="form_text"
           value={content.body}
           placeholder="Description"
           onChange={handleContent}

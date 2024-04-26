@@ -6,7 +6,7 @@ const TodoList = ({todos, onTodoClick}) => {
         {
         todos.map((todo, index) => (
             <article className="items" key={`todos=${index}`} onClick={() => onTodoClick(todo.id)}>
-                <div className="list_form">
+                <div>
                 <span className="list_title">{todo.title}</span>
                 <p className="list_text">{todo.body}</p>
                 </div>

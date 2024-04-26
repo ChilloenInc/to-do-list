@@ -7,11 +7,11 @@
     height: 560px;
     width: 100%;
 }
-.form_box {
+.form > div {
     margin: 15px;
     margin-top: 40px;
 }
-.form_title{
+.form > div > input {
     width: 100%;
     margin-bottom: 10px;
     font-family: 'Roboto';
@@ -24,7 +24,7 @@
     color: #000000;
     border: none;
 }
-.form_text{
+.form > div > textarea {
     width: 100%;
     height: 300px;
     opacity: 0.7;

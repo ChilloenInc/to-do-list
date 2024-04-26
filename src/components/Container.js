@@ -6,9 +6,9 @@ import { todoAtom, searchAtom } from "../store/atom";
 
 const Container = ({ onTodoClick, hasText, todos }) => {
   //const todoValue = useRecoilValue(todoAtom);
+  // useRecoilValue, useRecoilState, useSetRecoilState, useResetRecoilState
   const searchValue = useRecoilValue(searchAtom);
   const resetTodo = useResetRecoilState(todoAtom);
-  // useRecoilValue, useRecoilState, useSetRecoilState, useResetRecoilState
 
   const currentTodo = hasText ? searchValue : todos;
 
@@ -19,8 +19,8 @@ const Container = ({ onTodoClick, hasText, todos }) => {
         <TodoList todos={currentTodo} onTodoClick={onTodoClick} />
       ) : (
         <div className="emptyFrom">
-          <img className="emptyImg" src={images.empty} />
-          <span className="emptyTag">You have no to-dos</span>
+          <img src={images.empty} />
+          <span>You have no to-dos</span>
         </div>
       )}
     </div>

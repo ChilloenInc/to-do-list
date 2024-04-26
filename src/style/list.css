@@ -20,12 +20,12 @@
     border-radius: 15px;    
     margin: 4px;
 }
-.items .list_form {
-    margin: 20px 15px;  
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 3;
-    overflow: hidden;
+ .items > div {
+  margin: 20px 15px;  
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
 }
 .list_form .list_title {
     font-family: Roboto;

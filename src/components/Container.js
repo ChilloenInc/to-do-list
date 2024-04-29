@@ -7,14 +7,14 @@ import { todoAtom, searchAtom } from "../store/atom";
 const Container = ({ onTodoClick, hasText, todos }) => {
   //const todoValue = useRecoilValue(todoAtom);
   // useRecoilValue, useRecoilState, useSetRecoilState, useResetRecoilState
+  //const resetTodo = useResetRecoilState(todoAtom);
   const searchValue = useRecoilValue(searchAtom);
-  const resetTodo = useResetRecoilState(todoAtom);
-
   const currentTodo = hasText ? searchValue : todos;
+
 
   return (
     <div className="inner">
-      <button onClick={() => resetTodo()}>Clear</button>
+      {/* <button onClick={() => resetTodo()}>Clear</button> */}
       {Boolean(currentTodo) ? (
         <TodoList todos={currentTodo} onTodoClick={onTodoClick} />
       ) : (

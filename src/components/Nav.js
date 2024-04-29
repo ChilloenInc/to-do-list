@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "../style/nav.css";
 import { images } from "../iconImage";
+import { act } from "react-dom/test-utils";
 
 const Navbar = ({
   onSearchButtonClick,
@@ -8,22 +9,22 @@ const Navbar = ({
   onAdd,
   onBack,
   onSave,
-  status
+  action
 }) => {
   
   const [titleText, setTitleText] = useState("Todo");
 
   useEffect(() => {
-    if (status.isAdding) {
+    if (action === 'ADD') {
       setTitleText("Add");
     } 
-    if (status.isEditing) {
+    if (action === 'EDIT') {
       setTitleText("Edit");
     } 
-    else if(!status.isAdding && !status.isEditing){
+    else if(action === 'DEFAULT'){
       setTitleText("Todo");
     }
-  }, [status]);
+  }, [action]);
 
   const handleSearchTerm = (searchTerm) => {
     onSearchButtonClick();
@@ -33,7 +34,7 @@ const Navbar = ({
   return (
     <nav className="nav">
       {
-        (status.isAdding || status.isSearching || status.isEditing ) &&  
+        (action !== 'DEFAULT') &&  
       <button onClick={onBack}> 
         <img src={images.back} alt="icon"></img>
       </button>
@@ -41,7 +42,7 @@ const Navbar = ({
       
       <div className="textbox">
       {
-      status.isSearching ? (
+      (action === 'SEARCH') ? (
         <div className="search-wrap">
           <input type="text" placeholder="검색" onChange={(e) => { handleSearchTerm(e.target.value);}} />
         </div>
@@ -51,7 +52,7 @@ const Navbar = ({
       </div>
       
       <div className="buttons">
-        { !status.isAdding && !status.isSearching && !status.isEditing &&
+        { action === 'DEFAULT' &&
         <div>
           <button onClick={onSearchButtonClick}> 
             <img src={images.search} alt="icon"></img>
@@ -62,9 +63,9 @@ const Navbar = ({
           </button>
         </div>
         }
-        { (status.isAdding || status.isEditing) &&  
+        { (action === 'ADD' || action === 'EDIT') &&  
           <button onClick={onSave}>
-            { status.isAdding ? 
+            { action === 'ADD' ? 
               <img src={images.check} alt="icon"></img> : 
               <img src={images.submit} alt="icon"></img>
             }

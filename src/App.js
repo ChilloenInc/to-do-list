@@ -1,4 +1,4 @@
-import React, { useReducer, useState } from "react";
+import React, { useEffect, useReducer, useState } from "react";
 import Navbar from "./components/Nav";
 import Container from "./components/Container";
 import Form from "./components/Form";
@@ -17,43 +17,9 @@ import { type } from "@testing-library/user-event/dist/type";
 // ! 이 방법이 베스트임. 함수 추상화 -> 함수형프로그래밍 -> 단점: 코드량 많아서
 // ui - 비지니스 로직 분리를 하자.
 //1. react-hooks(custom-hooks), 2.컴포넌트 단에서 나누는 방법
-const reducer = (todos, action) => {
-  const copyTodos =  [...todos]
-  const lookupTable = {
-  'ADD': [ ...todos, {
-        id: action.id + 1,
-        title: action.title, 
-        body: action.body 
-        }
-      ],
-  'EDIT': copyTodos.find((todo) => todo.id === action.editTodoId),
-  "DEFAULT": todos,
-  }
-  return lookupTable[['ADD', 'EDIT'].includes(action.type) ? action.type : 'DEFAULT']
-};
-
-const initialValue = [
-  {
-    id: 1,
-    title: "React",
-    body: "React is",
-  },
-  {
-    id: 2,
-    title: "JS",
-    body: "JS is",
-  },
-  {
-    id: 3,
-    title: "Todo",
-    body: "Todo something...",
-  },
-];
 
 const App = () => {
-  const [todos, dispatch] = useReducer(reducer,initialValue);
-
-  //const [todos, setTodos] = useRecoilState(todoAtom);
+  const [todos, setTodos] = useRecoilState(todoAtom);
   const setSearchResults = useSetRecoilState(searchAtom);
   const [id, setId] = useState(3);
   const [editTodoId, setEditTodoId] = useState(null);
@@ -61,17 +27,30 @@ const App = () => {
   // 2차 edit, add, search, content
   // ! 역이는것은 하나로 모아주는것이 중요하다. => 객체로 관리
   const [searchTerm, setSearchTerm] = useState("");
-  const [status, setStatus] = useState({
-    isAdding: false,
-    isSearching: false,
-    isEditing: false
-  });
-
+  const [action, setAction] = useState('DEFAULT')// .ts 'ADD' | 'EDIT' | '' 
   const [content, setContent] = useState({
-    status: "basic",
     title: "",
     body: "",
   });
+  
+  const filterTodo = (action) => {
+    const copyTodos =  [...todos]
+
+    const lookupTable = {
+    'ADD': [ ...todos, {
+          id: id + 1,
+          title: content.title, 
+          body: content.body 
+          }
+        ],
+    'EDIT': copyTodos.map((todo, index) =>
+    todo.id === editTodoId ? { ...todo, title: content.title, body: content.body } : todo
+  ),
+
+    "DEFAULT": todos,
+    }
+    return lookupTable[['ADD', 'EDIT'].includes(action) ? action : 'DEFAULT']
+  };
 
   // 상태가 꼬이기 떄문에 전역상태관리 라이브러리 -> Redux, Recoil
   // 컴포넌트 추상화
@@ -83,34 +62,22 @@ const App = () => {
   };
 
   const handleReset = () => {
-    setStatus({
-      isSearching: false,
-      isAdding: false,
-      isEditing: false      
-    });
+    setAction('DEFAULT');
     setEditTodoId(null);
+    setSearchTerm(null)
     setContent({ title: "", body: "" });
   };
 
   const handleSearchButtonClick = () => {
-    setStatus(prevStatus => ({
-      ...prevStatus,
-      isSearching: true
-    }));
+    setAction('SEARCH');
   };
 
   const handleAdd = () => {
-    setStatus(prevStatus => ({
-      ...prevStatus,
-      isAdding: true
-    }));
+    setAction('ADD');
   };
 
   const handleEditTodoClick = (id) => {
-    setStatus(prevStatus => ({
-      ...prevStatus,
-      isEditing: true
-    }));
+    setAction('EDIT');
     setEditTodoId(id);
     const editTodo = todos.find((todo) => todo.id === id);
     const { title, body } = editTodo;
@@ -118,7 +85,7 @@ const App = () => {
   };
 
   const handleBack = () => {
-    if (status.isAdding ) {
+    if (action === 'ADD') {
       const confirmDelete = window.confirm(
         "Are you sure you want to remove everything"
       );
@@ -126,7 +93,7 @@ const App = () => {
         handleReset();
       }
     }
-    if (status.isEditing) {
+    if (action === 'EDIT') {
       const confirmDelete = window.confirm(
         "Are you sure you want to remove everything"
       );
@@ -134,7 +101,7 @@ const App = () => {
         handleReset();
       }
     }
-    if (status.isSearching) {
+    if (action === 'SEARCH') {
       handleReset();
     }
   };
@@ -142,9 +109,9 @@ const App = () => {
   const handleSave = () => {
     if (content.title !== "" && content.body !== "") {
       if (editTodoId !== null) {
-        dispatch({type:'EDIT', editTodoId, title: content.title, body: content.body, })
+        setTodos(filterTodo('EDIT',content));
       } else {
-        dispatch({type: 'ADD', id: id, title: content.title, body: content.body});
+        setTodos(filterTodo('ADD',content));
         setId(id+1);
       }
       handleReset();
@@ -162,7 +129,6 @@ const App = () => {
     const filteredTodos = todos.filter((todo) =>todo.title.toLowerCase()
      .includes(searchTerm.toLowerCase()));
      setSearchResults(filteredTodos);
-     //setSearchResults(dispatch({type:'SEARCH' , searchTerm}) );
   };
 
   return (
@@ -170,17 +136,19 @@ const App = () => {
       <Navbar
         onSearchButtonClick={handleSearchButtonClick}
         onSearch={handleFilterTodoList}
-        status={status}
         onAdd={handleAdd}
         onBack={handleBack}
         onSave={handleSave}
+        action={action}
       />
-      {status.isAdding || status.isEditing ? (
-        <Form content={content} handleContent={handleContent} />
-      ) : (
+      {action === 'ADD' || action === 'EDIT' ? (
+        <Form content={content} 
+              handleContent={handleContent} />
+      ): (
         <Container hasText={searchTerm} 
-        onTodoClick={handleEditTodoClick}
-        todos={todos} />
+                  onTodoClick={handleEditTodoClick} 
+                  todos={filterTodo(action)} 
+        />
       )}
     </div>
   );

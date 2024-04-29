@@ -23,11 +23,9 @@ const App = () => {
   const setSearchResults = useSetRecoilState(searchAtom);
   const [id, setId] = useState(3);
   const [editTodoId, setEditTodoId] = useState(null);
-  // 1차. edit, add, search, basic
-  // 2차 edit, add, search, content
   // ! 역이는것은 하나로 모아주는것이 중요하다. => 객체로 관리
   const [searchTerm, setSearchTerm] = useState("");
-  const [action, setAction] = useState('DEFAULT')// .ts 'ADD' | 'EDIT' | '' 
+  const [action, setAction] = useState('DEFAULT');
   const [content, setContent] = useState({
     title: "",
     body: "",
@@ -43,9 +41,9 @@ const App = () => {
           body: content.body 
           }
         ],
-    'EDIT': copyTodos.map((todo, index) =>
-    todo.id === editTodoId ? { ...todo, title: content.title, body: content.body } : todo
-  ),
+    'EDIT': copyTodos.map((todo) => todo.id === editTodoId ? 
+            { ...todo, title: content.title, body: content.body } : todo
+        ),
 
     "DEFAULT": todos,
     }
@@ -85,34 +83,24 @@ const App = () => {
   };
 
   const handleBack = () => {
-    if (action === 'ADD') {
-      const confirmDelete = window.confirm(
-        "Are you sure you want to remove everything"
-      );
-      if (confirmDelete) {
-        handleReset();
-      }
-    }
-    if (action === 'EDIT') {
-      const confirmDelete = window.confirm(
-        "Are you sure you want to remove everything"
-      );
-      if (confirmDelete) {
-        handleReset();
-      }
-    }
     if (action === 'SEARCH') {
       handleReset();
+    } else {
+      const confirmDelete = window.confirm(
+        "Are you sure you want to remove everything"
+      );
+      if (confirmDelete) {
+        handleReset();
+      }
     }
   };
 
   const handleSave = () => {
     if (content.title !== "" && content.body !== "") {
-      if (editTodoId !== null) {
-        setTodos(filterTodo('EDIT',content));
-      } else {
-        setTodos(filterTodo('ADD',content));
-        setId(id+1);
+      const actionType = editTodoId !== null ? 'EDIT' : 'ADD';
+      setTodos(filterTodo(actionType, content));
+      if (actionType === 'ADD') {
+        setId(id + 1);
       }
       handleReset();
     } else {

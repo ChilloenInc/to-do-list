@@ -15,15 +15,9 @@ const Navbar = ({
   const [titleText, setTitleText] = useState("Todo");
 
   useEffect(() => {
-    if (action === 'ADD') {
-      setTitleText("Add");
-    } 
-    if (action === 'EDIT') {
-      setTitleText("Edit");
-    } 
-    else if(action === 'DEFAULT'){
+    if(action === 'DEFAULT'){
       setTitleText("Todo");
-    }
+    } else setTitleText(action);
   }, [action]);
 
   const handleSearchTerm = (searchTerm) => {

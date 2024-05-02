@@ -53,15 +53,15 @@ const Navbar = ({
           </button>
 
           <button onClick={onAdd}>
-            <img src={images.add} alt="icon"></img>
+            <img className='addBtn' src={images.add} alt="icon"></img>
           </button>
         </div>
         }
         { (action === 'ADD' || action === 'EDIT') &&  
           <button onClick={onSave}>
             { action === 'ADD' ? 
-              <img src={images.check} alt="icon"></img> : 
-              <img src={images.submit} alt="icon"></img>
+              <img className='checkBtn' src={images.check} alt="icon"></img> : 
+              <img className='submitBtn' src={images.submit} alt="icon"></img>
             }
           </button>
         }

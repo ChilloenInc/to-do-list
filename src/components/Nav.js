@@ -29,7 +29,7 @@ const Navbar = ({
     <nav className="nav">
       {
         (action !== 'DEFAULT') &&  
-      <button onClick={onBack}> 
+      <button classname="returnBtn" onClick={onBack}> 
         <img src={images.back} alt="icon"></img>
       </button>
       }
@@ -52,8 +52,8 @@ const Navbar = ({
             <img src={images.search} alt="icon"></img>
           </button>
 
-          <button onClick={onAdd}>
-            <img className='addBtn' src={images.add} alt="icon"></img>
+          <button className='addBtn' onClick={onAdd}>
+            <img src={images.add} alt="icon"></img>
           </button>
         </div>
         }

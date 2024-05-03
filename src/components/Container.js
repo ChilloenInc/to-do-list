@@ -1,8 +1,8 @@
 import { useRecoilValue, useResetRecoilState } from "recoil";
-import { images } from "../iconImage";
 import "../style/list.css";
 import TodoList from "./TodoList";
 import { todoAtom, searchAtom } from "../store/atom";
+import EmptyForm from "./EmptyForm";
 
 const Container = ({ onTodoClick, hasText, todos }) => {
   //const todoValue = useRecoilValue(todoAtom);
@@ -11,17 +11,13 @@ const Container = ({ onTodoClick, hasText, todos }) => {
   const searchValue = useRecoilValue(searchAtom);
   const currentTodo = hasText ? searchValue : todos;
 
-
   return (
     <div className="inner">
       {/* <button onClick={() => resetTodo()}>Clear</button> */}
-      {Boolean(currentTodo) ? (
+      {Boolean(currentTodo.length) ? (
         <TodoList todos={currentTodo} onTodoClick={onTodoClick} />
       ) : (
-        <div className="emptyFrom">
-          <img src={images.empty} />
-          <span>You have no to-dos</span>
-        </div>
+        <EmptyForm/>
       )}
     </div>
   );

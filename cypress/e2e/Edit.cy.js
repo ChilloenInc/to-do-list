@@ -47,6 +47,9 @@ describe('edit ', () => {
         // 검색 값 입력
         cy.get('.search-wrap > input[type="text"]').type( 'React');
         cy.get('.items:eq(1)').click();
+        cy.get('.form input').type(' search editing');
+        cy.get('.form textarea').type(' search editing');
+        cy.get('[data-cy="submitBtn"]').click(); 
     });
 
 });

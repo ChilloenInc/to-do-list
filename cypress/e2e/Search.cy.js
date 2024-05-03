@@ -5,6 +5,7 @@ describe('Search template', ()=>{
         // eslint-disable-next-line cypress/no-unnecessary-waiting
         cy.wait(2000);
     });
+
     it('검색 값 입력했을 떄 검색값에 해당하는 TodoList가 나와야한다.' , () => {
         // eslint-disable-next-line cypress/unsafe-to-chain-command
         cy.get('[data-cy="addBtn"]').click().then(() => {
@@ -27,5 +28,12 @@ describe('Search template', ()=>{
         cy.get('[data-cy="returnBtn"]').click().then(() => {
             cy.get('.items').should('have.length', 4); 
         });
+    });
+
+    it('TodoList가 없을 때 emptyform 이 나와야한다.', () => {
+        cy.get('[data-cy="searchBtn"]').click();
+        cy.get('.search-wrap > input[type="text"]').type( 'No Result');
+        cy.get('.items').should('have.length', 0); 
+        cy.get('.emptyForm').should('exist');
     });
 });

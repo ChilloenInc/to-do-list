@@ -40,7 +40,7 @@ it('뒤로가기 버튼 클릭 시 confirm 창', () => {
 });
 
 it('Todo입력하기', () => {
-    cy.get('.buttons .addBtn').click();
+    cy.get('[data-cy="addBtn"]').click();
     //title, descripton입력하고 체크버튼 누르면 Todolist에 추가  
     // eslint-disable-next-line cypress/unsafe-to-chain-command
     cy.get('.form input').type('test@')
@@ -48,7 +48,7 @@ it('Todo입력하기', () => {
     // eslint-disable-next-line cypress/unsafe-to-chain-command
     cy.get('.form textarea').type('test!')
     .should('have.value', 'test!');
-    cy.get('#checkBtn').click();
+    cy.get('[data-cy="checkBtn"]').click();
     // TodoList에 Todo가 추가되었는지 확인
     cy.get('.items').should('have.length', 4); 
     cy.get('.items').should('contain', 'test@'); 

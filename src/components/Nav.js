@@ -29,7 +29,7 @@ const Navbar = ({
     <nav className="nav"> 
       {
         (action !== 'DEFAULT') &&  
-      <button id='returnBtn' onClick={onBack}> 
+      <button data-cy='returnBtn' onClick={onBack}> 
         <img src={images.back} alt="icon"></img>
       </button>
       }
@@ -52,7 +52,7 @@ const Navbar = ({
             <img src={images.search} alt="icon"></img>
           </button>
 
-          <button className='addBtn' onClick={onAdd}>
+          <button data-cy='addBtn' onClick={onAdd}>
             <img src={images.add} alt="icon"></img>
           </button>
         </div>
@@ -60,8 +60,8 @@ const Navbar = ({
         { (action === 'ADD' || action === 'EDIT') &&  
           <button onClick={onSave}>
             { action === 'ADD' ? 
-              <img id='checkBtn' src={images.check} alt="icon"></img> : 
-              <img id='submitBtn' src={images.submit} alt="icon"></img>
+              <img data-cy='checkBtn' src={images.check} alt="icon"></img> : 
+              <img data-cy='submitBtn' src={images.submit} alt="icon"></img>
             }
           </button>
         }

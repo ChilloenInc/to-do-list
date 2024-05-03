@@ -48,7 +48,7 @@ const Navbar = ({
       <div className="buttons">
         { action === 'DEFAULT' &&
         <div>
-          <button onClick={onSearchButtonClick}> 
+          <button data-cy='searchBtn' onClick={onSearchButtonClick}> 
             <img src={images.search} alt="icon"></img>
           </button>
 

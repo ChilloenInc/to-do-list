@@ -26,10 +26,10 @@ const Navbar = ({
   };
 
   return (
-    <nav className="nav">
+    <nav className="nav"> 
       {
         (action !== 'DEFAULT') &&  
-      <button classname="returnBtn" onClick={onBack}> 
+      <button id='returnBtn' onClick={onBack}> 
         <img src={images.back} alt="icon"></img>
       </button>
       }

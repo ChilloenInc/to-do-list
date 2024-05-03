@@ -60,8 +60,8 @@ const Navbar = ({
         { (action === 'ADD' || action === 'EDIT') &&  
           <button onClick={onSave}>
             { action === 'ADD' ? 
-              <img className='checkBtn' src={images.check} alt="icon"></img> : 
-              <img className='submitBtn' src={images.submit} alt="icon"></img>
+              <img id='checkBtn' src={images.check} alt="icon"></img> : 
+              <img id='submitBtn' src={images.submit} alt="icon"></img>
             }
           </button>
         }

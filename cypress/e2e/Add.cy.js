@@ -23,7 +23,7 @@ it('뒤로가기 버튼 클릭 시 confirm 창', () => {
   //제목 입력중일 때
   cy.get('.form input').type('test@');
   cy.get('#returnBtn').click();
-  // confirm 창이 나타나지 않는지 확인
+  // confirm 창이 나타나는지 확인
   cy.on('window:confirm', (confirmText) => {
     expect(confirmText).to.equal('Are you sure you want to remove everything');
   });
@@ -48,7 +48,7 @@ it('Todo입력하기', () => {
     // eslint-disable-next-line cypress/unsafe-to-chain-command
     cy.get('.form textarea').type('test!')
     .should('have.value', 'test!');
-    cy.get('.checkBtn').click();
+    cy.get('#checkBtn').click();
     // TodoList에 Todo가 추가되었는지 확인
     cy.get('.items').should('have.length', 4); 
     cy.get('.items').should('contain', 'test@'); 
